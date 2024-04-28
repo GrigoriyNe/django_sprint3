@@ -30,5 +30,11 @@ def category_posts(request, category_slug):
         Category.objects.filter(is_published=True),
         slug=category_slug
     )
-    context = {'category': category}
+
+    post_list = Post.objects.filter(
+        is_published=True, 
+        category__slug=category_slug
+        )
+    
+    context = {'category': category, 'post_list': post_list}
     return render(request, template, context)
