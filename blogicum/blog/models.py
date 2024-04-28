@@ -1,28 +1,29 @@
 from django.db import models
 from django.contrib.auth import get_user_model
 from core.models import PublishedModel
+
 User = get_user_model()
 
 
 class Category(PublishedModel):
     title = models.CharField('Заголовок', max_length=256)
     description = models.TextField('Описание')
-    slug = models.SlugField('Идентификатор', max_length=64,
-                            help_text='Идентификатор страницы для URL;'
+    slug = models.SlugField('Идентификатор', max_length=64, unique=True,
+                            help_text='Идентификатор страницы для URL; '
                             'разрешены символы латиницы, цифры, дефис '
                             'и подчёркивание.'
                             )
 
     class Meta:
-        verbose_name = 'публикация'
-        verbose_name_plural = 'Публикации'
+        verbose_name = 'категория'
+        verbose_name_plural = 'Категории'
 
     def __str__(self):
         return self.title
 
 
 class Location(PublishedModel):
-    name = models.TextField('Название места')
+    name = models.CharField('Название места', max_length=256)
 
     class Meta:
         verbose_name = 'местоположение'
@@ -48,7 +49,7 @@ class Post(PublishedModel):
     location = models.ForeignKey(
         Location,
         verbose_name='Местоположение',
-        default='Планета Земля',
+        default='null',
         related_name='location',
         on_delete=models.SET_NULL, null=True
     )
@@ -61,8 +62,8 @@ class Post(PublishedModel):
     )
 
     class Meta:
-        verbose_name = 'Пост'
-        verbose_name_plural = 'Посты'
+        verbose_name = 'публикация'
+        verbose_name_plural = 'Публикации'
 
     def __str__(self):
         return self.title

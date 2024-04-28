@@ -8,7 +8,7 @@ def index(request):
     post_list = (Post.objects.select_related(
         'category')
     ).filter(
-        is_published=True)[:5]
+        is_published=True, created_at__year__gte=2020)[:5]
     context = {'post_list': post_list}
     return render(request, template, context)
 
@@ -32,9 +32,10 @@ def category_posts(request, category_slug):
     )
 
     post_list = Post.objects.filter(
-        is_published=True, 
-        category__slug=category_slug
-        )
-    
+        is_published=True,
+        category__slug=category_slug,
+        created_at__year__gte=2020
+    )
+
     context = {'category': category, 'post_list': post_list}
     return render(request, template, context)
