@@ -1,21 +1,29 @@
 from django.shortcuts import render
-from django.http import Http404
+from blog.models import Post, Category
+from django.shortcuts import get_object_or_404
+
 
 
 
 def index(request):
     template = 'blog/index.html'
-    context = {'post': posts, 'flag': 'true'}
+    post_list = (Post.objects.select_related(
+        'category')
+    ).filter(
+        is_published=True)[:5]
+    context = {'post_list': post_list}
     return render(request, template, context)
 
 
 def post_detail(request, post_id):
     template = 'blog/detail.html'
-    try:
-        post_id in post_dict
-        context = {'post': post_dict[post_id]}
-    except KeyError:
-        raise Http404(f'Страница "{post_id}" не найдена')
+    posts = get_object_or_404(
+        Post.objects.filter(is_published=True, category__is_published=True),
+        pk=post_id
+    )
+
+    context = {'post': posts}
+    
     return render(request, template, context)
 
 
