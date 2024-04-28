@@ -34,7 +34,7 @@ class Location(PublishedModel):
 
 
 class Post(PublishedModel):
-    title = models.CharField('Заголовок', max_length=256)
+    title = models.CharField('Заголовок', blank=False, max_length=256 )
     text = models.TextField('Текст')
     pub_date = models.DateTimeField('Дата и время публикации',
                                     help_text='Если установить дату и время в будущем — можно делать '
@@ -42,12 +42,14 @@ class Post(PublishedModel):
                                     )
     author = models.ForeignKey(
         User,
+        blank=False, 
         verbose_name='Автор публикации',
         on_delete=models.CASCADE
     )
 
     location = models.ForeignKey(
         Location,
+        blank=False,
         verbose_name='Местоположение',
         default='null',
         related_name='location',
@@ -56,6 +58,7 @@ class Post(PublishedModel):
 
     category = models.ForeignKey(
         Category,
+        blank=False,
         related_name='category',
         verbose_name='Категория',
         on_delete=models.SET_NULL, null=True
