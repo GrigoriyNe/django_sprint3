@@ -6,9 +6,10 @@ User = get_user_model()
 
 
 class Category(PublishedModel):
-    title = models.CharField('Заголовок', blank=False, max_length=256)
-    description = models.TextField('Описание')
-    slug = models.SlugField('Идентификатор', max_length=64, unique=True,
+    title = models.CharField('Заголовок', max_length=256, blank=False)
+    description = models.TextField('Описание', blank=False)
+    slug = models.SlugField('Идентификатор', max_length=64,
+                            unique=True, blank=False,
                             help_text='Идентификатор страницы для URL; '
                             'разрешены символы латиницы, цифры, дефис '
                             'и подчёркивание.'
@@ -23,7 +24,7 @@ class Category(PublishedModel):
 
 
 class Location(PublishedModel):
-    name = models.CharField('Название места', max_length=256)
+    name = models.CharField('Название места', max_length=256, blank=False)
 
     class Meta:
         verbose_name = 'местоположение'
@@ -35,17 +36,17 @@ class Location(PublishedModel):
 
 class Post(PublishedModel):
     title = models.CharField('Заголовок', blank=False, max_length=256)
-    text = models.TextField('Текст')
-    pub_date = models.DateTimeField('Дата и время публикации',
+    text = models.TextField('Текст', blank=False)
+    pub_date = models.DateTimeField('Дата и время публикации', blank=False,
                                     help_text='Если установить дату и время '
                                     'в будущем — можно делать '
                                     'отложенные публикации.'
                                     )
     author = models.ForeignKey(
         User,
+        on_delete=models.CASCADE,
         blank=False,
         verbose_name='Автор публикации',
-        on_delete=models.CASCADE,
     )
 
     location = models.ForeignKey(
@@ -59,6 +60,7 @@ class Post(PublishedModel):
 
     category = models.ForeignKey(
         Category,
+        blank=False,
         related_name='category',
         verbose_name='Категория',
         on_delete=models.SET_NULL, null=True,

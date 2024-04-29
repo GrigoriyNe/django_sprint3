@@ -2,6 +2,7 @@ from django.db import models
 
 
 class PublishedModel(models.Model):
+    id = 'id',
     is_published = models.BooleanField('Опубликовано',
                                        default=True, help_text='Снимите '
                                        'галочку, чтобы скрыть публикацию.'
