@@ -1,6 +1,4 @@
 from django.contrib import admin
-
-
 from .models import Category
 from .models import Location
 from .models import Post

@@ -6,7 +6,7 @@ User = get_user_model()
 
 
 class Category(PublishedModel):
-    title = models.CharField('Заголовок', max_length=256)
+    title = models.CharField('Заголовок', blank=False, max_length=256)
     description = models.TextField('Описание')
     slug = models.SlugField('Идентификатор', max_length=64, unique=True,
                             help_text='Идентификатор страницы для URL; '
@@ -50,7 +50,7 @@ class Post(PublishedModel):
 
     location = models.ForeignKey(
         Location,
-        blank=False,
+        blank=True,
         verbose_name='Местоположение',
         default='null',
         related_name='location',

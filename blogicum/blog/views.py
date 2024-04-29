@@ -9,7 +9,8 @@ def index(request):
     post_list = (Post.objects.select_related(
         'category')
     ).filter(
-        is_published=True, created_at__year__gte=2020)[:5]
+        is_published=True, category__is_published=True,
+        created_at__lt=datetime.datetime.now())[:5]
     context = {'post_list': post_list}
     return render(request, template, context)
 
