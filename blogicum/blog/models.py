@@ -45,7 +45,7 @@ class Post(PublishedModel):
         User,
         blank=False,
         verbose_name='Автор публикации',
-        on_delete=models.CASCADE
+        on_delete=models.CASCADE,
     )
 
     location = models.ForeignKey(
@@ -54,15 +54,14 @@ class Post(PublishedModel):
         verbose_name='Местоположение',
         default='null',
         related_name='location',
-        on_delete=models.SET_NULL, null=True
+        on_delete=models.SET_NULL, null=True,
     )
 
     category = models.ForeignKey(
         Category,
-        blank=False,
         related_name='category',
         verbose_name='Категория',
-        on_delete=models.SET_NULL, null=True
+        on_delete=models.SET_NULL, null=True,
     )
 
     class Meta:
