@@ -109,8 +109,7 @@ venv/
 ENV/
 env.bak/
 venv.bak/
-tests/
-test/
+
 
 # Spyder project settings
 .spyderproject
@@ -149,5 +148,5 @@ dmypy.json
 
 # папки со статикой и медиа
 media/
-tests/.vscode
+
 ./blogicum/static_dev/
