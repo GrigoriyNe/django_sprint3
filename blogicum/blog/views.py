@@ -1,10 +1,10 @@
 from django.shortcuts import render
 from blog.models import Post, Category
 from django.shortcuts import get_object_or_404
-import datetime
+from django.utils import timezone
 
 
-today = datetime.datetime.now()
+today = timezone.now()
 
 
 def index(request):
@@ -20,9 +20,7 @@ def post_detail(request, pk):
     template = 'blog/detail.html'
     posts = get_object_or_404(
         Post.objects.filter(is_published=True, category__is_published=True,
-                            pub_date__lt=today),
-        pk=pk
-    )
+                            pub_date__lt=today, pk=pk))
     context = {'post': posts}
     return render(request, template, context)
 
