@@ -53,7 +53,6 @@ class Post(PublishedModel):
         Location,
         blank=True,
         verbose_name='Местоположение',
-        default='null',
         related_name='location',
         on_delete=models.SET_NULL, null=True,
     )
