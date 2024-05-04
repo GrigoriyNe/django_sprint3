@@ -1,17 +1,18 @@
 from django.shortcuts import render
-from blog.models import Post, Category
+from blog.models import Post, Category, PostQueryset
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
+from django.conf import settings
 
 
-today = timezone.now()
+now = timezone.now()
 
 
 def index(request):
     template = 'blog/index.html'
-    post_list = Post.objects.filter(
-        is_published=True, category__is_published=True,
-        pub_date__lt=today).order_by('title')[:5]
+    post_list = Post.published.select_related(
+    'author'
+    ).order_by('title')[:settings.POSTS_ON_PAGE]
     context = {'post_list': post_list}
     return render(request, template, context)
 
@@ -19,8 +20,9 @@ def index(request):
 def post_detail(request, pk):
     template = 'blog/detail.html'
     posts = get_object_or_404(
-        Post.objects.filter(is_published=True, category__is_published=True,
-                            pub_date__lt=today, pk=pk))
+        Post.published.filter(
+            pk=pk
+        ))
     context = {'post': posts}
     return render(request, template, context)
 
@@ -28,13 +30,12 @@ def post_detail(request, pk):
 def category_posts(request, category_slug):
     template = 'blog/category.html'
     category = get_object_or_404(
-        Category.objects.filter(is_published=True,
-                                slug=category_slug))
-    post_list = Post.objects.filter(
-        is_published=True,
+        Category.objects.filter(
+            is_published=True,
+            slug=category_slug
+        ))
+    post_list = Post.published.filter(
         category__slug=category_slug,
-        category__is_published=True,
-        pub_date__lt=today
     )
 
     context = {'category': category, 'post_list': post_list}
