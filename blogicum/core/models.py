@@ -14,6 +14,8 @@ class PublishedModel(models.Model):
         blank=False,
         auto_now_add=True,
         )
+    
+    
 
     class Meta:
         abstract = True

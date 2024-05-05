@@ -1,16 +1,14 @@
 from django.shortcuts import render
-from blog.models import Post, Category, PostQueryset
+from blog.models import Post, Category, PostQuerySet
 from django.shortcuts import get_object_or_404
-from django.utils import timezone
+
 from django.conf import settings
 
-
-now = timezone.now()
 
 
 def index(request):
     template = 'blog/index.html'
-    post_list = Post.published.select_related(
+    post_list = Post.objects.published().select_related(
     'author'
     ).order_by('title')[:settings.POSTS_ON_PAGE]
     context = {'post_list': post_list}
@@ -20,7 +18,7 @@ def index(request):
 def post_detail(request, pk):
     template = 'blog/detail.html'
     posts = get_object_or_404(
-        Post.published.filter(
+        Post.objects.published().filter(
             pk=pk
         ))
     context = {'post': posts}
@@ -34,7 +32,9 @@ def category_posts(request, category_slug):
             is_published=True,
             slug=category_slug
         ))
-    post_list = Post.published.filter(
+    post_list = Post.objects.published().select_related(
+    'author'
+    ).filter(
         category__slug=category_slug,
     )
 

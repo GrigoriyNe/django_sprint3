@@ -2,19 +2,19 @@ from django.db import models
 from django.contrib.auth import get_user_model
 from core.models import PublishedModel
 from django.db.models.query import QuerySet
+from django.utils import timezone
 
 
+now = timezone.now()
 User = get_user_model()
 
 
-class PostQueryset(models.QuerySet):
+class PostQuerySet(models.query.QuerySet):
     def published(self):
         return self.filter(
             is_published=True,
-            category__is_published=True,
-            pub_date__lt='now',
-        )
-
+            pub_date__lt=now,
+            category__is_published=True)
 
 
 class Category(PublishedModel):
@@ -101,9 +101,10 @@ class Post(PublishedModel):
         on_delete=models.SET_NULL,
         null=True,
     )
-    objects = models.Manager()
-   # published = PublishedPostManager()
-    published = PostQueryset.as_manager()
+   # PublishedPostManager = PostQueryset.as_manager
+    objects = PostQuerySet.as_manager()
+  #  published = PublishedPostManager()
+    published = PostQuerySet.as_manager()
 
     class Meta:
         verbose_name = 'публикация'
