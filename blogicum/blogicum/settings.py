@@ -3,13 +3,11 @@ from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 SECRET_KEY = 'django-insecure-lj)a4x)5f96+c2f)1eixgp87%=a&4=m60)765#58)vn#&-6ebx'
 
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -44,7 +42,6 @@ ROOT_URLCONF = 'blogicum.urls'
 TEMPLATES_DIR = BASE_DIR / 'template'
 
 POSTS_ON_PAGE = 5
-
 
 TEMPLATES = [
     {
@@ -107,8 +104,6 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
-
-
 
 STATIC_URL = '/static/'
 
