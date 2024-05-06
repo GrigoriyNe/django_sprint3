@@ -1,16 +1,16 @@
-from django.shortcuts import render
-from blog.models import Post, Category
-from django.shortcuts import get_object_or_404
 from django.conf import settings
 
+from django.shortcuts import get_object_or_404, render
 
-published = Post.objects.published().select_related(
+from blog.models import Category, Post
+
+
+published_list = Post.published.published().select_related(
     'author')
-
 
 def index(request):
     template = 'blog/index.html'
-    post_list = published[:settings.POSTS_ON_PAGE]
+    post_list = published_list.order_by('title')[:settings.POSTS_ON_PAGE]
     context = {'post_list': post_list}
     return render(request, template, context)
 
@@ -18,7 +18,7 @@ def index(request):
 def post_detail(request, pk):
     template = 'blog/detail.html'
     posts = get_object_or_404(
-        published.filter(pk=pk))
+        published_list.filter(pk=pk))
     context = {'post': posts}
     return render(request, template, context)
 
@@ -29,8 +29,7 @@ def category_posts(request, category_slug):
         Category.objects.filter(
             is_published=True,
             slug=category_slug))
-    post_list = published.filter(
-        category__slug=category_slug)
-
+    post_list = published_list.filter(
+        category=category)
     context = {'category': category, 'post_list': post_list}
     return render(request, template, context)

@@ -1,20 +1,14 @@
-from django.db import models
-from django.contrib.auth import get_user_model
 from core.models import PublishedModel
+
+from django.contrib.auth import get_user_model
+
+from django.db import models
+
 from django.utils import timezone
 
 
 now = timezone.now()
 User = get_user_model()
-
-
-class PostQuerySet(models.QuerySet):
-    def published(self):
-        return self.filter(
-            is_published=True,
-            pub_date__lt=now,
-            category__is_published=True)
-
 
 class Category(PublishedModel):
     title = models.CharField(
@@ -59,7 +53,28 @@ class Location(PublishedModel):
         return self.name
 
 
+class PostQuerySet(models.QuerySet):
+    def published(self):
+        return self.filter(
+            is_published=True,
+            pub_date__lt=now,
+            category__is_published=True)
+
+
+class PublishedPostManager(models.Manager):
+    def get_queryset(self):
+        return PostQuerySet(self.model)
+
+    def published(self):
+        return self.get_queryset().published()
+
+
 class Post(PublishedModel):
+
+    objects = models.Manager()
+    
+    published = PublishedPostManager()
+
     title = models.CharField(
         'Заголовок',
         max_length=256,
@@ -95,8 +110,6 @@ class Post(PublishedModel):
         on_delete=models.SET_NULL,
         null=True,
     )
-
-    objects = PostQuerySet.as_manager()
 
     class Meta:
         verbose_name = 'публикация'
