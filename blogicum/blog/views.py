@@ -8,6 +8,7 @@ from blog.models import Category, Post
 published_list = Post.published.published().select_related(
     'author')
 
+
 def index(request):
     template = 'blog/index.html'
     post_list = published_list.order_by('title')[:settings.POSTS_ON_PAGE]

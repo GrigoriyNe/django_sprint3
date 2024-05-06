@@ -10,6 +10,7 @@ from django.utils import timezone
 now = timezone.now()
 User = get_user_model()
 
+
 class Category(PublishedModel):
     title = models.CharField(
         'Заголовок',
@@ -72,7 +73,7 @@ class PublishedPostManager(models.Manager):
 class Post(PublishedModel):
 
     objects = models.Manager()
-    
+
     published = PublishedPostManager()
 
     title = models.CharField(
