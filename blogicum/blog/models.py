@@ -64,10 +64,7 @@ class PostQuerySet(models.QuerySet):
 
 class PublishedPostManager(models.Manager):
     def get_queryset(self):
-        return PostQuerySet(self.model)
-
-    def published(self):
-        return self.get_queryset().published()
+        return PostQuerySet(self.model, using=self._db).published()
 
 
 class Post(PublishedModel):
