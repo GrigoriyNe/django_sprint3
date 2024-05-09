@@ -58,10 +58,10 @@ class PostQuerySet(models.QuerySet):
         return self.select_related(
             'author').select_related(
             'category').select_related(
-            'location'
-        ).filter(is_published=True,
-                 pub_date__lt=timezone.now(),
-                 category__is_published=True)
+            'location').filter(
+                is_published=True,
+                pub_date__lt=timezone.now(),
+                category__is_published=True)
 
 
 class PublishedPostManager(models.Manager):
