@@ -1,8 +1,8 @@
 import pytest
-from blog.models import Category
-from django.db.models import (BooleanField, CharField, DateTimeField,
-                              SlugField, TextField)
+from django.db.models import (
+    BooleanField, CharField, SlugField, TextField, DateTimeField)
 
+from blog.models import Category
 from tests.conftest import _TestModelAttrs
 
 

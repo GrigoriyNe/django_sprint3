@@ -1,13 +1,12 @@
-from core.models import PublishedModel
-
 from django.contrib.auth import get_user_model
 
 from django.db import models
 
 from django.utils import timezone
 
+from core.models import PublishedModel
 
-now = timezone.now()
+
 User = get_user_model()
 
 
@@ -56,10 +55,13 @@ class Location(PublishedModel):
 
 class PostQuerySet(models.QuerySet):
     def published(self):
-        return self.filter(
-            is_published=True,
-            pub_date__lt=now,
-            category__is_published=True)
+        return self.select_related(
+            'author').select_related(
+            'category').select_related(
+            'location'
+        ).filter(is_published=True,
+                 pub_date__lt=timezone.now(),
+                 category__is_published=True)
 
 
 class PublishedPostManager(models.Manager):
@@ -68,11 +70,8 @@ class PublishedPostManager(models.Manager):
 
 
 class Post(PublishedModel):
-
     objects = models.Manager()
-
     published = PublishedPostManager()
-
     title = models.CharField(
         'Заголовок',
         max_length=256,
